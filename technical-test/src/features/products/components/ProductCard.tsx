@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, type KeyboardEvent, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from '../../../app/hooks';
@@ -12,9 +12,10 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const imageSrc = product.imageUrl ?? `https://picsum.photos/seed/${product.id}/300/200`;
 
   const handleToggleFavorite = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
+    (event: MouseEvent<HTMLButtonElement>) => {
       event.stopPropagation();
       dispatch(toggleFavorite(product.id));
     },
@@ -22,7 +23,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   );
 
   const handleRemove = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
+    (event: MouseEvent<HTMLButtonElement>) => {
       event.stopPropagation();
 
       if (window.confirm('Remove this product?')) {
@@ -36,9 +37,19 @@ const ProductCard = ({ product }: ProductCardProps) => {
     navigate(`/products/${product.id}`);
   }, [navigate, product.id]);
 
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLElement>) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        handleOpenDetails();
+      }
+    },
+    [handleOpenDetails],
+  );
+
   return (
-    <article onClick={handleOpenDetails} role="button" tabIndex={0} onKeyPress={handleOpenDetails}>
-      <img src={product.imageUrl} alt={product.title} />
+    <article onClick={handleOpenDetails} onKeyDown={handleKeyDown} role="button" tabIndex={0}>
+      <img src={imageSrc} alt={product.title} />
       <div>
         <header>
           <h3>{product.title}</h3>
