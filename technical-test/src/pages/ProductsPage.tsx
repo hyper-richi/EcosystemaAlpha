@@ -17,11 +17,20 @@ const ProductsPage = () => {
   }, [dispatch, status]);
 
   return (
-    <main>
-      <h1>Products</h1>
+    <section className="flex min-h-0 w-full flex-1 flex-col gap-6">
+      <header className="space-y-3 shrink-0">
+        <p className="text-xs uppercase tracking-[0.4em] text-sky-300/80">Catalog</p>
+        <h2 className="text-3xl font-semibold tracking-tight text-white drop-shadow sm:text-4xl">
+          Products
+        </h2>
+        <p className="max-w-2xl text-sm leading-relaxed text-slate-200/80">
+          Discover, favorite, and curate a vivid showcase of products blending live API data with
+          your own creations — every card pulses with color and motion.
+        </p>
+      </header>
       <ProductFilters />
       <ProductList />
-    </main>
+    </section>
   );
 };
 
